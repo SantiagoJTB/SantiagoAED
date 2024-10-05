@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListarProductos;
 use App\Http\Controllers\NumberController;
+use App\Http\Controllers\ToDoController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return "página raíz de nuestra aplicación";
@@ -26,7 +28,17 @@ Route::get('/sleep', [HomeController::class, 'sleep']);
 
 Route::get('/numbers', [NumberController::class, 'showNumbers']);
 
-
 //Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/** Creacion de To Do */
+
+
+// Rutas de autenticación
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Ruta de tareas
+Route::match(['get', 'post'], '/iniciotodo', [ToDoController::class, 'iniciotodo'])->name('iniciotodo');
