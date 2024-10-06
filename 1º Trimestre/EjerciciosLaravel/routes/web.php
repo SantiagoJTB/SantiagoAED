@@ -6,6 +6,10 @@ use App\Http\Controllers\ListarProductos;
 use App\Http\Controllers\NumberController;
 use App\Http\Controllers\ToDoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ListaColoresController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsuarioCSVController;
+
 
 Route::get('/', function () {
     return "página raíz de nuestra aplicación";
@@ -32,8 +36,18 @@ Route::get('/numbers', [NumberController::class, 'showNumbers']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-/** Creacion de To Do */
+Route::get('/colores', [ListaColoresController::class, 'listacolores'])->name('listacolores');
+Route::post('/colores', [ListaColoresController::class, 'listacolores']);
+Route::post('/colores/eliminar', [ListaColoresController::class, 'eliminarColores'])->name('eliminarColores');
 
+
+Route::get('/usuario', [UserController::class, 'mostrarFormulario'])->name('usuario.mostrarFormulario');
+Route::post('/usuario', [UserController::class, 'procesarFormulario'])->name('usuario.procesarFormulario');
+
+Route::get('/crear-csv', [UsuarioCSVController::class, 'crearCSV'])->name('crearCSV');
+Route::get('/leer-csv', [UsuarioCSVController::class, 'leerCSV'])->name('leerCSV');
+
+/** Creacion de To Do */
 
 // Rutas de autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
