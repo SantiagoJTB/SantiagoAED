@@ -9,7 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ListaColoresController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuarioCSVController;
-
+use App\Http\Controllers\DirectorioController;
 
 Route::get('/', function () {
     return "página raíz de nuestra aplicación";
@@ -47,6 +47,15 @@ Route::post('/usuario', [UserController::class, 'procesarFormulario'])->name('us
 Route::get('/crear-csv', [UsuarioCSVController::class, 'crearCSV'])->name('crearCSV');
 Route::get('/leer-csv', [UsuarioCSVController::class, 'leerCSV'])->name('leerCSV');
 
+Route::get('iniciocreardirectorio', function(){
+    return view('formcreardirectorio');
+});
+
+Route::get('/crear-directorio', [DirectorioController::class, 'crearDirectorio'])->name('crearDirectorio');
+
+Route::get('/inicioSubirFichero', function(){
+    return view('inicioSubirFichero');
+});
 /** Creacion de To Do */
 
 // Rutas de autenticación
