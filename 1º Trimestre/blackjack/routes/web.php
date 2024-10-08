@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CartasController;
+use App\Http\Controllers\AppController;
 
-// Ruta que maneja GET y POST para la raíz
-Route::match(['get', 'post'], '/',
-[CartasController::class, 'generarCartas'])->name('cartas.generar');
+Route::match(['get', 'post'], '/', [AppController::class, 'inicio']);
+Route::match(['get', 'post'], '/partida', [AppController::class, 'partida']);

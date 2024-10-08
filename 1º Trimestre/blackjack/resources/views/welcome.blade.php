@@ -10,16 +10,8 @@
 <body class="container">
     <form method="POST" action="{{ route('cartas.generar') }}">
         @csrf
-        <input type="submit" name="Enviar" value="Enviar">
+        <input type="text" name="nombreJugador">
+        <input type="submit" name="Enviar" value="Enviar" placeholder="Iniciar Partida">
     </form>
-    <div id="lista">
-        @if(isset($mazo))
-            @foreach($mazo as $carta)
-                <div>{{ $carta->getValor() }} {{ $carta->getTipo() }}</div>
-            @endforeach
-        @else
-            <div>No hay cartas disponibles.</div>
-        @endif
-    </div>
 </body>
 </html>

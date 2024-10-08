@@ -7,11 +7,17 @@ use App\Models\Jugador;
 class Partida{
 
     public $jugador;
+    public $crupier;
     public $mazo;
 
-    public function __construct() {
+    public function __construct($nombreJugador = "") {
+        $this->jugador = new Jugador($nombreJugador);
+        $this->crupier = new Jugador('Crupier 1');
         $this->mazo = new Mazo();
-        $this->jugador = new Jugador();
+    }
+
+    public function agregarPuntuacion(){
+
     }
 
 }

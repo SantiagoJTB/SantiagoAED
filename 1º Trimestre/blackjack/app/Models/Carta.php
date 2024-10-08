@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Cartas{
+class Carta{
     private $valor;
     private $tipo;
 
@@ -11,21 +11,11 @@ class Cartas{
         $this->tipo = $tipo;
     }
 
-
-
-    /**
-     * Get the value of valor
-     */
     public function getValor()
     {
         return $this->valor;
     }
 
-    /**
-     * Set the value of valor
-     *
-     * @return  self
-     */
     public function setValor($valor)
     {
         $this->valor = $valor;
@@ -33,23 +23,16 @@ class Cartas{
         return $this;
     }
 
-    /**
-     * Get the value of tipos
-     */
     public function getTipo()
     {
         return $this->tipo;
     }
 
-    /**
-     * Set the value of tipos
-     *
-     * @return  self
-     */
     public function setTipo($tipo)
     {
         $this->tipo = $tipo;
 
         return $this;
     }
+
 }
