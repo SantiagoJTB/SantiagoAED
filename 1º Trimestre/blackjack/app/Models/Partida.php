@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Models\Mazo;
 use App\Models\Jugador;
+use Illuminate\Types\Relations\Part;
 
 class Partida{
 
@@ -16,8 +17,25 @@ class Partida{
         $this->mazo = new Mazo();
     }
 
-    public function agregarPuntuacion(){
 
+
+    /**
+     * Get the value of jugador
+     */
+    public function getJugador()
+    {
+        return $this->jugador;
     }
 
+    /**
+     * Set the value of jugador
+     *
+     * @return  self
+     */
+    public function setJugador($jugador)
+    {
+        $this->jugador = $jugador;
+
+        return $this;
+    }
 }
