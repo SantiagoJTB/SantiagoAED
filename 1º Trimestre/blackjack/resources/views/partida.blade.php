@@ -9,6 +9,7 @@
 </head>
 <body>
     <div id="container">
+        <h1>{{session()->get('mensaje')}}</h1>
         <div id="jugador">
         <p>Jugador: {{ $partida->jugador->getNombre() }}</p>
         <p>Cartas de {{$partida->jugador->getNombre()}}:</p>
@@ -34,6 +35,7 @@
         @csrf
         <button type="submit" name="action" value="pedirCarta">Pedir Carta</button>
         <button type="submit" name="action" value="plantarse">Plantarse</button>
+        <button type="submit" name="action" value="reiniciar">Nueva Partida</button>
 
     </form>
 </body>

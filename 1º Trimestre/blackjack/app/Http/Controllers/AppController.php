@@ -22,6 +22,7 @@ class AppController extends Controller{
             'partida' => $partida,
             'cartasJugador' => "",
             'cartasCrupier' => "",
+            'mensaje' => ""
     ]);
     }
 
@@ -30,31 +31,27 @@ class AppController extends Controller{
 
         if($request->input('action')==='pedirCarta'){
             $partida->darCartas();
+        } elseif($request->input('action')==='plantarse'){
             $partida->elegirGanador();
-        }elseif($request->input('action')==='plantarse'){
-            $partida->elegirGanador();
+        } elseif($request->input('action')==='reiniciar'){
+            session()->forget('mensaje');
+            return view('inicio');
         }
-        $cartasJugador[] = $partida->jugador->mano->getCartas();
-        $cartasCrupier[] = $partida->crupier->mano->getCartas();
-        session()->put('cartasJugador',$cartasJugador);
-        session()->put('cartasCrupier',$cartasCrupier);
 
-        $ganador = $partida->getGanador();
+        // Guardar las cartas y el ganador en la sesión
+        session()->put('cartasJugador', $partida->jugador->mano->getCartas());
+        session()->put('cartasCrupier', $partida->crupier->mano->getCartas());
+        session()->put('ganador', $partida->getGanador());
 
-        session()->put('ganador', $ganador);
+        $mensaje = 'GANADOR: '.$partida->ganador->getNombre();
+        session()->put('mensaje', $mensaje);
 
-        if($partida->ganador->getNombre() !== null){
-            return view('inicio', [
-                'partida' => session()->get('partida'),
-                'ganador' => $ganador
-            ]);
-        }else{
-            return view('partida', [
-                'partida' => $partida,
-                'cartasJugador' => $cartasJugador,
-                'cartasCrupier' => $cartasCrupier
-            ]);
-        }
+        return view('partida', [
+            'partida' => $partida,
+            'mensaje' => $mensaje
+        ]);
+    }
+
 }
 
-}
+

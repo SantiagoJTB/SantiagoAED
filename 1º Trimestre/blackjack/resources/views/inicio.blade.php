@@ -8,7 +8,6 @@
 </head>
 <body>
     <h1>BlackJack 21</h1>
-    <h1>El ganador ha sido: {{$partida->ganador->getNombre()}}</h1>
     <p>Introduce un nombre de usuario:</p>
     <form action="/partida" method="post">
         @csrf
