@@ -2,67 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Cartas;
 use App\Models\Partida;
-use Illuminate\Support\Facades\Route;
-use App\Models\Jugador;
-use App\Models\Mano;
 use App\Models\Mazo;
-use Illuminate\Contracts\Session\Session;
-use PHPUnit\TextUI\XmlConfiguration\Logging\Junit;
+use App\Models\Jugador;
+use Illuminate\Http\Request;
+use Illuminate\Types\Relations\Part;
 
-class AppController extends Controller
-{
-    public function inicio(){
-        return view('welcome');
+class AppController extends Controller{
+    public function inicioPartida(Request $request){
+        if($request->filled('nombreJugador')){
+            $nombreJugador = $request->input('nombreJugador');
+            $jugador = new Jugador($nombreJugador);
+            $partida = new Partida($jugador);
+            session()->put('partida', $partida);
+        }
+        $partida = session()->get('partida');
+
+        return view('partida', [
+            'partida' => $partida,
+            'cartasJugador' => "",
+            'cartasCrupier' => "",
+    ]);
     }
 
- public function comienzoSesion(Request $request) {
-    if ($request->has('nombreJugador')) {
-        $jugador = new Jugador($request->input('nombreJugador'));
-        $crupier = new Jugador('Crupier');
-        $mazo = new Mazo();
-        $partida = new Partida($jugador, $crupier, $mazo);
-        session(['partida' => $partida]);
-        session(['nombreJugador' => $jugador->getNombre()]); // Asegúrate de guardar el nombre del jugador aquí
-        return view('partida', ['nombreJugador' => $jugador->getNombre()]);
-    } else {
-        $error = 'Introduce un nombre de jugador.';
-        return view('welcome', compact('error'));
-    }
-}
-    public function darCarta($aux, Request $request){
-        $partida = session('partida');
-        $mazo = $partida->getMazo();
-        $jugador = $partida->getJugador();
-        $crupier = $partida->getCrupier();
+    public function eleccionJugador(Request $request) {
+        $partida = session()->get('partida');
 
-        $manoJugador = session('manoJugador', new Mano());
-        $manoCrupier = session('manoCrupier', new Mano());
+        if($request->input('action')==='pedirCarta'){
+            $partida->darCartas();
+            $partida->elegirGanador();
+        }elseif($request->input('action')==='plantarse'){
+            $partida->elegirGanador();
+        }
+        $cartasJugador[] = $partida->jugador->mano->getCartas();
+        $cartasCrupier[] = $partida->crupier->mano->getCartas();
+        session()->put('cartasJugador',$cartasJugador);
+        session()->put('cartasCrupier',$cartasCrupier);
 
-            if($request->has('pedirCarta')){
-                $manoJugador = [$mazo[$aux]];
-                session(['manoJugador'=>$manoJugador]);
-                $aux++;
-                $manoCrupier = [$mazo[$aux]];
-                session(['manoCrupier'=>$manoCrupier]);
+        $ganador = $partida->getGanador();
 
-                //COMPROBAR QUE VALOR DE MANO < 21 IF END
+        session()->put('ganador', $ganador);
 
-                return view('partida', [
-                    'manoJugador' => $manoJugador,
-                    'manoCrupier' => $manoCrupier
-                ]);
-
-            }else if($request->has('plantarse')){
-                $manoFinalJugador = $manoJugador;
-                $manoFinalCrupier = $manoCrupier;
-
-                //HACER LA COMPARACION
-
-    }
-
+        if($partida->ganador->getNombre() !== null){
+            return view('inicio', [
+                'partida' => session()->get('partida'),
+                'ganador' => $ganador
+            ]);
+        }else{
+            return view('partida', [
+                'partida' => $partida,
+                'cartasJugador' => $cartasJugador,
+                'cartasCrupier' => $cartasCrupier
+            ]);
+        }
 }
 
 }

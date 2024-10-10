@@ -22,8 +22,10 @@ class Mazo{
             }
         }
 
-        return shuffle($this->mazo);
+        shuffle($this->mazo);
+        return $this->mazo;
     }
+
 
     public function getMazo()
     {
