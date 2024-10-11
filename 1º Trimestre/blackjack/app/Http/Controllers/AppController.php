@@ -32,13 +32,13 @@ class AppController extends Controller{
         if($request->input('action')==='pedirCarta'){
             $partida->darCartas();
         } elseif($request->input('action')==='plantarse'){
+            $partida->darCartaCrupier();
             $partida->elegirGanador();
         } elseif($request->input('action')==='reiniciar'){
             session()->forget('mensaje');
             return view('inicio');
         }
 
-        // Guardar las cartas y el ganador en la sesión
         session()->put('cartasJugador', $partida->jugador->mano->getCartas());
         session()->put('cartasCrupier', $partida->crupier->mano->getCartas());
         session()->put('ganador', $partida->getGanador());

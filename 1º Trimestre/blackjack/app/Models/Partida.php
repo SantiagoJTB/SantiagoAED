@@ -27,50 +27,63 @@ class Partida {
         return $this->crupier->getMano()->getPuntuacion();
     }
 
-    // En el método 'darCartas', solo repartimos cartas y verificamos si alguien ha superado 21
-// En el método 'darCartas', solo repartimos cartas y verificamos si alguien ha superado 21
-public function darCartas() {
-    $mazo = $this->mazo->getMazo();
-    //CONTADOR DE ASES(si la mano tiene un AS ese AS vale 11, si tiene mas de 1 vale 1) Y LAS CARTAS MAYORES DE 10 VALEN 10
+    public function darCartas() {
+        $mazo = $this->mazo->getMazo();
 
-    // JUGADOR
-    $cartaJugador = $mazo[$this->puntero];
-    $nuevaCartaJugador = $this->jugador->mano->getCartas();
-    $nuevaCartaJugador[] = $cartaJugador;
-    $this->jugador->mano->setCartas($nuevaCartaJugador);
-    $valorManoCrupier = 0;
-    $valorManoJugador = $this->calcularPuntuacion($nuevaCartaJugador);
-    $this->jugador->getMano()->setPuntuacion($valorManoJugador);
-    session()->put('valorManoJugador', $valorManoJugador);
+        // JUGADOR
+        $cartaJugador = $mazo[$this->puntero];
+        $nuevaCartaJugador = $this->jugador->mano->getCartas();
+        $nuevaCartaJugador[] = $cartaJugador;
+        $this->jugador->mano->setCartas($nuevaCartaJugador);
+        $valorManoJugador = $this->calcularPuntuacion($nuevaCartaJugador);
+        $this->jugador->getMano()->setPuntuacion($valorManoJugador);
+        session()->put('valorManoJugador', $valorManoJugador);
 
-    // Si el jugador se pasa de 21, el crupier gana, si el crupier tiene 21 gana tambien
-    if ($valorManoJugador > 21 || $valorManoCrupier == 21) {
-        $this->ganador->setNombre($this->crupier->getNombre());
-        return;
+        if ($valorManoJugador > 21) {
+            $this->ganador->setNombre($this->crupier->getNombre());
+            return;
+        }
+
+        $this->puntero++;
+
+        // CRUPIER
+        $this->darCartaCrupier();
+
+        $valorManoCrupier = $this->crupier->getMano()->getPuntuacion();
+        if ($valorManoCrupier > 21 || $valorManoJugador == 21) {
+            $this->ganador->setNombre($this->jugador->getNombre());
+        }
+
+        $this->puntero++;
     }
 
-    $this->puntero++;
+    public function darCartaCrupier() {
+        $mazo = $this->mazo->getMazo();
+        $nuevaCartaCrupier = $this->crupier->getMano()->getCartas();
+        $valorManoCrupier = $this->crupier->getMano()->getPuntuacion();
 
-    // CRUPIER
-    $cartaCrupier = $mazo[$this->puntero];
-    $nuevaCartaCrupier = $this->crupier->getMano()->getCartas();
-    $nuevaCartaCrupier[] = $cartaCrupier;
-    $this->crupier->getMano()->setCartas($nuevaCartaCrupier);
+        if ($valorManoCrupier >= 17) {
+            return;
+        } elseif ($valorManoCrupier < 11) {
+            $cartaCrupier = $mazo[$this->puntero];
+            $nuevaCartaCrupier[] = $cartaCrupier;
+            $this->crupier->getMano()->setCartas($nuevaCartaCrupier);
+        } else {
+            if (rand(0, 1) === 1) {
+                $cartaCrupier = $mazo[$this->puntero];
+                $nuevaCartaCrupier[] = $cartaCrupier;
+                $this->crupier->getMano()->setCartas($nuevaCartaCrupier);
+            }
+        }
 
-    //AÑADIR SI MANO CRUPIER > 17 NO PEDIR, SI ES MENOR DE 11 PEDIR, SI ES ENTRE 11 A 17 ELECCION ALEATORIA
-    $valorManoCrupier = $this->calcularPuntuacion($nuevaCartaCrupier);
-    $this->crupier->getMano()->setPuntuacion($valorManoCrupier);
-    session()->put('valorManoCrupier', $valorManoCrupier);
+        $valorManoCrupier = $this->calcularPuntuacion($nuevaCartaCrupier);
+        $this->crupier->getMano()->setPuntuacion($valorManoCrupier);
 
-    // Si el crupier se pasa de 21, el jugador gana automáticamente
-    if ($valorManoCrupier > 21 || $valorManoJugador == 21) {
-        $this->ganador->setNombre($this->jugador->getNombre());
+        session()->put('valorManoCrupier', $valorManoCrupier);
+
+        $this->puntero++;
     }
 
-    $this->puntero++;
-}
-
-// En el método 'elegirGanador', definimos el ganador solo al plantarse
 public function elegirGanador() {
     $puntuacionCrupier = $this->getPuntuacionCrupier();
     $puntuacionJugador = $this->getPuntuacionJugador();
@@ -87,15 +100,30 @@ public function elegirGanador() {
         } else {
             $this->ganador->setNombre('Empate');
         }
-    }
+    }session()->forget('mensaje');
 }
 
-    // Función para calcular la puntuación
-    public function calcularPuntuacion($mano) {
+    public function calcularPuntuacion($cartas) {
         $puntuacion = 0;
-        foreach ($mano as $carta) {
-            $puntuacion += $carta->getValor();
+        $numeroAses = 0;
+
+        foreach ($cartas as $carta) {
+
+            if ($carta->getValor() > 10) {
+                $puntuacion += 10;
+            } elseif ($carta->getValor() == 1) {
+                $numeroAses++;
+                $puntuacion += 11;
+            } else {
+                $puntuacion += $carta->getValor();
+            }
         }
+
+        while ($puntuacion > 21 && $numeroAses > 0) {
+            $puntuacion -= 10;
+            $numeroAses--;
+        }
+
         return $puntuacion;
     }
 
