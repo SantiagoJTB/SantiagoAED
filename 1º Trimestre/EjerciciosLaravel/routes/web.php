@@ -10,6 +10,10 @@ use App\Http\Controllers\ListaColoresController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuarioCSVController;
 use App\Http\Controllers\DirectorioController;
+use App\Http\Controllers\FicheroController;
+use App\Http\Controllers\FicheroCsvController;
+
+use function Ramsey\Uuid\v1;
 
 Route::get('/', function () {
     return "página raíz de nuestra aplicación";
@@ -56,6 +60,22 @@ Route::get('/crear-directorio', [DirectorioController::class, 'crearDirectorio']
 Route::get('/inicioSubirFichero', function(){
     return view('inicioSubirFichero');
 });
+
+Route::match(['get', 'post'], '/crearDir', [FicheroController::class, 'crearDirectorio'])->name('crearDirectorio');
+
+Route::get('/crearFichero', function () {
+    return view('ejercicio18');
+})->name('formularioFichero');
+
+Route::post('/crearFichero', [FicheroCsvController::class, 'crearFichero'])->name('crearFichero');
+
+Route::get('/leerFichero', [FicheroCsvController::class, 'leerFichero'])->name('leerFichero');
+
+Route::get('/listarFicheros', [FicheroCsvController::class, 'listarFicheros'])->name('listarFicheros');
+
+Route::get('/descargar/{nombreFichero}', [FicheroCsvController::class, 'descargarFichero'])->name('descargarFichero');
+Route::get('/borrar/{nombreFichero}', [FicheroCsvController::class, 'borrarFichero'])->name('borrarFichero');
+
 /** Creacion de To Do */
 
 // Rutas de autenticación
