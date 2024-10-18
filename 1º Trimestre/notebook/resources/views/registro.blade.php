@@ -7,14 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="registro.autentification" method="POST">
-        <input type="text" name="userNameRegistro" required/>
-        <input type="text" name="userPasswordRegistro" required/>
-        <input type="text" name="userPasswordConfirmation" required/>
+    <h2>Registro:</h2>
+    <form action="{{route('registro.autentification')}}" method="POST">
+        @csrf
+        <input type="text" name="userNameRegistro" placeholder="Nombre usuario" required/>
+        <br>
+        <input type="text" name="userPasswordRegistro" placeholder="Contraseña" required/>
+        <br>
+        <input type="text" name="userPasswordConfirmacion" placeholder="Confirmar contraseña" required/>
+        <br>
         <input type="submit" value="Enviar"/>
     </form>
-    <a href="1º Trimestre/notebook/resources/views/login.blade.php">Volver a login</a>
-    <p>{{'mensaje'}}</p>
+    <a href="{{route('loginget')}}">Volver a login</a>
+    <p id="mensajeRegistro">{{$mensaje ?? ""}}</p>
 
 </body>
 </html>

@@ -7,26 +7,41 @@
     <title>Document</title>
 </head>
 <body>
-    <div>Directorios privados:
+    <h2>Bienvenido {{session('nombre')}}</h2>
+    <div id="directorioPrivado">Directorio privado:
         <ul>
-            @foreach($directoriosPrivados as $directorio)
-            <li>{{$directorio}}</li>
-            @endforeach
+            @if(session('directorioPrivado') && is_array(session('directorioPrivado')))
+                @foreach(session('directorioPrivado') as $directorio)
+                    <li><a href="{{ $directorio['ruta'] }}">{{ $directorio['nombre'] }}</a></li>
+                @endforeach
+            @else
+                <li>No hay directorios privados disponibles.</li>
+            @endif
         </ul>
     </div>
-    <div>Directorios publicos:
+    <br>
+    <div id="directorioPublico">Directorio público:
         <ul>
-            @foreach($directoriosPublicos as $directorio)
-            <li>{{$directorio}}</li>
-            @endforeach
+            @if(session('directorioPublico') && is_array(session('directorioPublico')))
+                @foreach(session('directorioPublico') as $directorio)
+                    <li><a href="{{ $directorio['ruta'] }}">{{ $directorio['nombre'] }}</a></li>
+                @endforeach
+            @else
+                <li>No hay directorios públicos disponibles.</li>
+            @endif
         </ul>
-        <p>Crear nuevo directorio </p>
-        <form method="post" action="{{route('crearDirectorio')}}" enctype="multipart/form-data">
+    </div>
+    <div>
+        <p>Crear nuevo fichero </p>
+        <form method="post" action="{{route('editor.get')}}" enctype="multipart/form-data">
             @csrf
-            <input type="text" name="nombre" placeholder="Nombre del directorio">
-            <input type="radio" name="nuevoDirectorio" value="0"> Publico
-            <input type="radio" name="nuevoDirectorio" value="1" checked> Privado
-            <input type="submit" value="Crear">
+            <button type="submit">Crear fichero</button>
+        </form>
+    </div>
+    <div>
+        <form method="post" action="{{route('logout')}}">
+            @csrf
+            <input type="submit" value="Cerrar Sesión">
         </form>
     </div>
 </body>

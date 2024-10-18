@@ -7,12 +7,16 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="login.autentification" method="POST">
-        <input type="text" name="userName" id="inputUserName" required/>
-        <input type="text" name="userPassword" id="inputUserPassword" required/>
+    <h2>Login:</h2>
+    <form action="{{route('login.autentification')}}" method="POST">
+        @csrf
+        <input type="text" name="userName" id="inputUserName" placeholder="Nombre de usuario" required/>
+        <br>
+        <input type="text" name="userPassword" id="inputUserPassword" placeholder="Contraseña" required/>
+        <br>
         <button type="submit" value="Enviar" id="buttonSubmitUser">Entrar</button>
     </form>
-    <a href="1º Trimestre/notebook/resources/views/registro.blade.php">Registrarse</a>
-        <p>{{'mensaje'}}</p>
+    <a href="{{route('registroget')}}">Registrarse</a>
+        <p id="mensajeLogin">{{$mensaje ?? ""}}</p>
 </body>
 </html>
