@@ -29,9 +29,9 @@ class LoginController extends Controller{
                     $passwordCifrada = trim($datos[1]);
 
                     // Comparamos el nombre y verificamos la contraseña
-                    if ($nombreIntroducido === $nombreUsuario && 
+                    if ($nombreIntroducido === $nombreUsuario &&
                     password_verify($pwIntroducida, $passwordCifrada)) {
-                    
+
                     Session::put('nombre', $nombreIntroducido);
                     $urlDirectorio = storage_path('app/private/' . $nombreIntroducido);
                     Session::put('urlDirectorio', $urlDirectorio);
@@ -48,8 +48,8 @@ class LoginController extends Controller{
                         'contenidoPublico' => $contenidoPublico,
                     ]);
                 }
-            
-        
+
+
                 }
             }
 
@@ -117,21 +117,21 @@ class LoginController extends Controller{
     public function mostrarDirectorioPrivado()
     {
         $nombreDirectorio = storage_path('app/private/'.session('nombre'));
-    
+
         $contenidoDirectorio[] = $this->getContenido($nombreDirectorio);
-    
+
         if (is_array($contenidoDirectorio)) {
             Session::put('directorioPrivado', $contenidoDirectorio);
         } else {
             Session::put('directorioPrivado', ['']);
         }
     }
-    
+
     public function mostrarDirectorioPublico(){
         $nombreDirectorio = storage_path('app/public');
-    
+
         $contenidoDirectorio[] = $this->getContenido($nombreDirectorio);
-    
+
         if (is_array($contenidoDirectorio)) {
             Session::put('directorioPublico', $contenidoDirectorio);
         } else {

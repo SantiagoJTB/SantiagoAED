@@ -24,7 +24,7 @@
         @csrf
         <input type="hidden" name="contenido" id="contenido">
         <textarea id="editor">{{ $contenido }}</textarea><br />
-        
+
         <input type="text" name="nombreFichero" placeholder="Introduce el nombre" required>
         <input type="submit" value="Guardar"><br />
     </form>
