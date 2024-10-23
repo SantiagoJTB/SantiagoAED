@@ -1,0 +1,11 @@
+$this->filename = env('FILE_USERS');
+            $this->fileUsernameIndex = env('FILE_USER_NAME_INDEX');
+
+
+            try {
+                $myPDO = DB::getPdo();
+                $myPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $dao = new UsuarioDAO();
+            } catch (PDOException $e) {
+                $dao = new UsuarioFileDAO();
+            }
