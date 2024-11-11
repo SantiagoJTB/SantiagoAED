@@ -28,7 +28,7 @@ CREATE TABLE tableros (
 
 CREATE TABLE figuras (
   id INT AUTO_INCREMENT,
-  imagen BLOB,
+  imagen LONGBLOB,
   tipo_imagen VARCHAR(50),
   CONSTRAINT pk_figuras PRIMARY KEY (id)
 );
@@ -42,6 +42,16 @@ CONSTRAINT pk_ft PRIMARY KEY(id),
 CONSTRAINT fk_tablero FOREIGN KEY(tablero_id) REFERENCES tableros(id),
 CONSTRAINT fk_figura FOREIGN KEY(figura_id) REFERENCES figuras(id),
 CONSTRAINT uq_tablero_posicion UNIQUE KEY(tablero_id,posicion)
+);
+
+CREATE TABLE tableros_usuarios (
+  id INT AUTO_INCREMENT,
+  tablero_id INT NOT NULL,
+  usuario_id INT NOT NULL,
+  CONSTRAINT pk_tableros_usuarios PRIMARY KEY (id),
+  CONSTRAINT fk_tablero_usuario FOREIGN KEY (tablero_id) REFERENCES tableros(id),
+  CONSTRAINT fk_usuario_tablero FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+  CONSTRAINT uq_tablero_usuario UNIQUE (tablero_id, usuario_id)
 );
 
 INSERT INTO roles (id,nombre) VALUES (1,'usuario'), (2,'admin');
